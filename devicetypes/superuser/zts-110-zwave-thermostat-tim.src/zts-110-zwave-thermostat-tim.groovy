@@ -374,15 +374,17 @@ def setCoolingSetpoint(Double degreesF) {
 	])
 }
 def configure() {
+	log.debug("running configure()")
     delayBetween([
     	zwave.thermostatModeV2.thermostatModeSupportedGet().format(),
 	zwave.thermostatFanModeV3.thermostatFanModeSupportedGet().format(),
 	zwave.associationV1.associationSet(groupingIdentifier:1, nodeId:[zwaveHubNodeId]).format(),
     zwave.associationV2.associationSet(groupingIdentifier:3, nodeId:[zwaveHubNodeId]).format(),
     //Tim Code Start ***Don't forget comma on previous line
-    zwave.configurationV1.configurationSet(parameterNumber: 1, size: 1, scaledConfigurationValue: 1).format()
+    zwave.configurationV1.configurationSet(parameterNumber: 1, size: 1, scaledConfigurationValue: 1).format(),
     //zwave.configurationV1.configurationSet(parameterNumber: 11, size: 1, scaledConfigurationValue: 1).format(),
-    //zwave.configurationV1.configurationSet(parameterNumber: 13, size: 1, scaledConfigurationValue: 0).format()
+    // Adjust thermostate to 0 degree offset.  -2 seemed appropriate
+    zwave.configurationV1.configurationSet(parameterNumber: 13, size: 1, scaledConfigurationValue: -2).format()
     //Tim Code End*/
 ], 2300)
 }
